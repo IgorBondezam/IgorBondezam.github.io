@@ -15,6 +15,20 @@ import { ListarItem } from './views/Item/ListarItem';
 import { CadastrarItem } from './views/Item/cadastrarItem';
 import { ListarPedByClienteId } from './views/Cliente/infoCli';
 import { EditarServ } from './views/Servico/editarServ';
+import { ListarCompra } from './views/Compra/ListarCompra';
+import { CadastrarCompra } from './views/Compra/CadastrarCompra';
+import { ListarProdutos } from './views/Produtos/ListarProdutos';
+import { CadastrarProduto } from './views/Produtos/CadastrarProduto';
+import { ListarItemPro } from './views/item-produto/ListarItemPro';
+import { CadastrarItemPro } from './views/item-produto/CadastrarItemPro';
+import { InfoCompra } from './views/Compra/InfoCompra';
+import { InfoPro } from './views/Produtos/infoPro';
+import { EditarProduto } from './views/Produtos/EditarProduto';
+import { EditarPedido } from './views/Pedido/EditarPedido';
+import { EditarCompra } from './views/Compra/EditarCompra';
+import { EditarCliente } from './views/Cliente/editarCliente';
+import { EditarItem } from './views/Item/EditarItem';
+import { EditarItemProduto } from './views/item-produto/EditarItemProduto';
 
 
 function App() {
@@ -35,8 +49,22 @@ function App() {
           <Route path="/listar-item/" component={ListarItem}/>
           <Route path="/cadastraritem/" component={CadastrarItem}/>
           <Route path="/listar-pedido-do-cliente/:id" component={ListarPedByClienteId}/>
-          <Route path="/atualizar-servico/" component={EditarServ}/>
-          
+          <Route path="/editarservico/:id" component={EditarServ}/>
+          <Route path="/listar-compra/" component={ListarCompra}/>
+          <Route path="/cadastrarcompra/" component={CadastrarCompra}/>
+          <Route path="/listar-produto/" component={ListarProdutos}/>
+          <Route path="/cadastrarproduto/" component={CadastrarProduto}/>
+          <Route path="/listar-item-produto/" component={ListarItemPro}/>
+          <Route path="/cadastraritemproduto/" component={CadastrarItemPro}/>
+          <Route path="/listarcompra/:id" component={InfoCompra}/>
+          <Route path="/listarproduto/:id" component={InfoPro}/>
+          <Route path="/editarproduto/:id" component={EditarProduto}/>
+          <Route path="/editarpedido/:id" component={EditarPedido}/>
+          <Route path="/editarcompra/:id" component={EditarCompra}/>
+          <Route path="/editarcliente/:id" component={EditarCliente}/>
+          <Route path="/editaritem/:PedidoId/:ServicoId" component={EditarItem}/>
+          <Route path="/editaritemproduto/:CompraId/:ProdutoId" component={EditarItemProduto}/>
+
         </Switch>
       </Router>
 

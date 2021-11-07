@@ -4,9 +4,9 @@ import { useState } from "react/cjs/react.development";
 import { Alert, Button, Container, Form, FormGroup, Input, Label } from "reactstrap"
 import { api } from "../../../config";
 
-export const Cadastrar = () => {
+export const CadastrarCompra = () => {
 
-    const [servico, setServico] = useState({
+    const [compra, setCompra] = useState({
         nome: '',
         descricao: ''
     });
@@ -16,20 +16,20 @@ export const Cadastrar = () => {
         message: ''
     })
 
-    const valorInput = e => setServico({
-        ...servico, [e.target.name]: e.target.value
+    const valorInput = e => setCompra({
+        ...compra, [e.target.name]: e.target.value
     });
 
-    const cadServico = async e => {
+    const cadCompra = async e => {
         console.log("Cadastrar");
         e.preventDefault();
-        console.log(servico);
+        console.log(compra);
 
         const headers = {
             'Content-Type': "application/json"
         }
 
-        await axios.post(api + "/servicos", servico, { headers })
+        await axios.post(api + "/compras", compra, { headers })
             .then((response) => {
                 if (response.data.error) {
                     setStatus({
@@ -54,10 +54,10 @@ export const Cadastrar = () => {
         <Container>
             <div className="d-flex">
                 <div className="m-auto p-2">
-                    <h1>Cadastrar Serviço</h1>
+                    <h1>Cadastrar Compra</h1>
                 </div>
                 <div className="p-2">
-                    <Link to="/listar-servicos" className="btn btn-outline-primary btn-sm">Serviços</Link>
+                    <Link to="/listar-compra" className="btn btn-outline-dark btn-sm">Compras</Link>
                 </div>
 
             </div>
@@ -68,16 +68,17 @@ export const Cadastrar = () => {
 
             {status.type === 'success' ? <Alert color="success">{status.message}</Alert> : ""}
 
-            <Form className="p-2" onSubmit={cadServico}>
+            <Form className="p-2" onSubmit={cadCompra}>
+
                 <FormGroup className="p-2">
-                    <Label>Nome</Label>
-                    <Input type="text" name="nome" placeholder="Nome do serviço"
+                    <Label>Data da Compra</Label>
+                    <Input type="date" name="data" placeholder="Data"
                         onChange={valorInput} />
                 </FormGroup>
 
                 <FormGroup className="p-2">
-                    <Label>Descrição</Label>
-                    <Input type="text" name="descricao" placeholder="Descrição do serviço"
+                    <Label>ClienteId</Label>
+                    <Input type="text" name="ClienteId" placeholder="Id da Compra"
                         onChange={valorInput} />
                 </FormGroup>
 

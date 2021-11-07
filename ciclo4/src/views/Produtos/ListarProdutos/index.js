@@ -6,7 +6,7 @@ import { api } from "../../../config";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const ListarCli = () => {
+export const ListarProdutos = () => {
 
     const [data, setData] = useState([]);
 
@@ -14,11 +14,11 @@ export const ListarCli = () => {
         type: '',
         message: ''
     });
-    const getClientes = async () => {
-        await axios.get(api + "/listaclientes")
+    const getProdutos = async () => {
+        await axios.get(api + "/listaprodutos")
             .then((response) => {
-                console.log(response.data.clientes);
-                setData(response.data.clientes);
+                console.log(response.data.produtos);
+                setData(response.data.produtos);
             }).catch(() => {
                 setStatus({
                     type: 'error',
@@ -28,27 +28,21 @@ export const ListarCli = () => {
             })
     }
 
-    const apagarCliente = async (id) => {
-
-        const headers = {
-            'Content-type': 'application/json'
-        }
-
-        await axios.get(api + "/excluircliente/" + id, { headers })
+    const apagarProduto = async (id) => {
+        await axios.get(api + "/excluirproduto/" + id)
             .then((response) => {
                 console.log(response.data.error);
-                getClientes();
+                getProdutos();
             }).catch(() => {
                 setStatus({
                     type: 'error',
-                    message: 'Não foi possível conectar-se à API'
+                    message: 'Falha na conexão: Sem conexão com a API.'
                 });
             });
     };
 
-
     useEffect(() => {
-        getClientes();
+        getProdutos();
     }, [])
 
 
@@ -57,13 +51,12 @@ export const ListarCli = () => {
             <Container>
                 <div className="d-flex">
                     <div>
-                        <h1>Visualizar Clientes Cadastrados</h1>
+                        <h1>Visualizar informações dos Produtos</h1>
                     </div>
                     <div className="m-auto p-2">
-                        <Link to="cadastrarcliente" className="btn btn-outline-primary btn-sm">Cadastrar Cliente</Link>
+                        <Link to="cadastrarproduto" className="btn btn-outline-primary btn-sm ">Cadastrar Produtos</Link>
                     </div>
                 </div>
-
                 <hr className="m-1" />
 
                 {status.type == 'error' ? <Alert className="text-center" color="danger"> {status.message}</Alert> : ""}
@@ -72,13 +65,8 @@ export const ListarCli = () => {
                         <tr>
                             <th>ID</th>
                             <th>Nome</th>
-                            <th>Endereço</th>
-                            <th>Cidade</th>
-                            <th>Uf</th>
-                            <th>Nascimento</th>
-                            <th>Cliente Desde</th>
-                            <th>Ações</th>
-
+                            <th>Descrição</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,18 +74,14 @@ export const ListarCli = () => {
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.nome}</td>
-                                <td>{item.endereco}</td>
-                                <td>{item.cidade}</td>
-                                <td>{item.uf}</td>
-                                <td>{item.nascimento}</td>
-                                <td>{item.clienteDesde}</td>
+                                <td>{item.descricao}</td>
                                 <td className="text-center/">
-                                    <Link to={"/listar-pedido-do-cliente/" + item.id}
+                                    <Link to={"/listarproduto/" + item.id}
                                         className="btn btn-outline-primary btn-sm">Consultar</Link>
-                                    <Link to={"/editarcliente/" + item.id}
+                                    <Link to={"/editarproduto/"+item.id}
                                         className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
-                                        onClick={() => apagarCliente(item.id)}>Excluir</span>
+                                        onClick={() => apagarProduto(item.id)}>Excluir</span>
 
                                 </td>
                             </tr>

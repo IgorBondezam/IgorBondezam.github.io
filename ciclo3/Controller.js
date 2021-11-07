@@ -26,6 +26,21 @@ app.get('/', function(rec, res){
 //                  -------------------------------------------------------------
 
 app.post('/clientes', async(req,res)=>{ //criar clientes
+    // await aguardar(3000);
+    // function aguardar(ms){
+    //     return new Promise((resolve)=>{
+    //         setTimeout(resolve.ms);
+    //     });
+    // };
+
+
+
+//Olha professor, infelizmente n deu certo o aguardar, fiz que nem estava na aula, mas não funcionou.
+
+
+
+
+
     await cliente.create(
         req.body
     ).then(function(){
@@ -118,6 +133,14 @@ app.get('/numeroclientes', async(req, res)=>{ //numero total de clientes
     });
 });
 
+app.get('/clientes/:id', async(req, res)=>{ //lista pedido por id
+    await cliente.findByPk(req.params.id,{include:[{all: true}]})
+    .then(cli=>{
+        return res.json({cli});
+    })
+} )
+
+
 //                                     listas pedidos 
 //                  -------------------------------------------------------------
 
@@ -132,8 +155,8 @@ app.get('/listapedidos', async(req, res)=>{//lista de pedidos
 
 app.get('/pedidos/:id', async(req, res)=>{ //lista pedido por id
     await pedido.findByPk(req.params.id,{include:[{all: true}]})
-    .then(ped=>{
-        return res.json({ped});
+    .then(pedido=>{
+        return res.json({pedido});
     })
 } )
 app.get('/pedidos/cliente/:ClienteId', async(req, res)=>{ //lista pedido por id
@@ -144,6 +167,13 @@ app.get('/pedidos/cliente/:ClienteId', async(req, res)=>{ //lista pedido por id
 } )
 //                                     listas servicos 
 //                  -------------------------------------------------------------
+
+app.get('/servicos/:id', async(req, res)=>{ //lista pedido por id
+    await servico.findByPk(req.params.id,{include:[{all: true}]})
+    .then(servico=>{
+        return res.json({servico});
+    })
+} )
 
 
 app.get('/listaservicos', async(req, res)=>{ //lista de servicos
@@ -202,6 +232,19 @@ app.get('/servico/:id/pedidos', async(req, res)=>{ //lista servicos por id
         });
     });
 });
+app.get('/itempedido/:PedidoId/:ServicoId', async(req, res)=>{ //lista servicos por id
+    await itempedido.findAll({where: {PedidoId: req.params.PedidoId, ServicoId: req.params.ServicoId}})
+    .then(item =>{
+        return res.json({item});
+
+    }).catch(function(error){
+        return res.status(400).json({
+            error: true,
+            message: "Erro: não foi possivel conectar"
+        });
+    });
+});
+
 
 // app.get('/item/:id', async(req, res)=>{ //lista item por Pedidoid
 //     await itempedido.findByPk(req.params.PedidoId,{include:[{all: true}]})
@@ -319,6 +362,23 @@ app.put('/atualizaitem', async(req, res)=>{ //atualização de itens
         });
     });
 
+    app.put('/atualizaitens', async(req, res)=>{ //atualização de itens
+        await itempedido.update(req.body,{
+            where: {PedidoId: req.body.PedidoId, ServicoId: req.body.ServicoId}
+            }).then(function(){
+                return res.json({
+                    error: false,
+                    message: 'Item alterado com sucesso!'
+                });
+            }).catch(function(erro){
+                return res.status(400).json({
+                    error: true,
+                    message:"Erro na alteração"
+                });
+            });
+        });
+    
+
     //                                                                          fim de atualizar
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -370,9 +430,9 @@ app.get('/excluirservico/:id', async(req, res)=>{ //Exclui servico
     });
 });
 
-app.get('/excluiritem/:Pedidoid', async(req, res)=>{ //Exclui item
+app.get('/excluiritem/:PedidoId/:ServicoId', async(req, res)=>{ //Exclui item
     await itempedido.destroy({
-        where: {Pedidoid: req.params.Pedidoid}
+        where: {PedidoId:req.params.PedidoId, ServicoId:req.params.ServicoId}
     }).then(function(){
         return res.json({
             error: false,
@@ -471,6 +531,29 @@ app.get('/compras/:id', async(req, res)=>{ //lista pedido por id
     })
 } )
 
+app.get('/compras/cliente/:ClienteId', async(req, res)=>{ //lista pedido por id
+    await compra.findAll({where: {ClienteId: req.params.ClienteId}})
+    .then(compra=>{
+        return res.json({compra});
+    })
+} )
+
+app.get('/compras/:id/produtos', async(req, res)=>{ //lista servicos por id
+    await itemcompra.findAll({where: {CompraId: req.params.id}})
+    .then(compra =>{
+        return res.json({
+            error: false,
+            compra
+        });
+    }).catch(function(error){
+        return res.status(400).json({
+            error: true,
+            message: "Erro: não foi possivel conectar"
+        });
+    });
+});
+
+
 //                                     listas produtos 
 //                  -------------------------------------------------------------
 
@@ -482,6 +565,28 @@ app.get('/listaprodutos', async(req, res)=>{ //lista de produtos
         res.json({produtos})
     });
 });
+app.get('/listaprodutos/:id', async(req, res)=>{ //lista de produtos
+    await produto.findByPk(req.params.id,{include:[{all: true}]})
+    .then(produto=>{
+        return res.json({produto});
+    })
+})
+
+app.get('/produtos/:id/compra', async(req, res)=>{ //lista servicos por id
+    await itemcompra.findAll({where: {ProdutoId: req.params.id}})
+    .then(pro =>{
+        return res.json({
+            error: false,
+            pro
+        });
+    }).catch(function(error){
+        return res.status(400).json({
+            error: true,
+            message: "Erro: não foi possivel conectar"
+        });
+    });
+});
+
 
 //                                     listas item 
 //                  -------------------------------------------------------------
@@ -494,6 +599,19 @@ app.get('/listaitemcompra', async(req, res)=>{//lista de clientes
         res.json({item})
     });
 });
+app.get('/itemproduto/:CompraId/:ProdutoId', async(req, res)=>{ //lista servicos por id
+    await itemcompra.findAll({where: {CompraId: req.params.CompraId, ProdutoId: req.params.ProdutoId}})
+    .then(item =>{
+        return res.json({item});
+
+    }).catch(function(error){
+        return res.status(400).json({
+            error: true,
+            message: "Erro: não foi possivel conectar"
+        });
+    });
+});
+
 
 // app.get('/itemcompra/:id', async(req, res)=>{ //lista item por compraid
 //     await itemcompra.findByPk(req.params.CompraId,{include:[{all: true}]})
@@ -574,6 +692,22 @@ app.put('/atualizaproduto', async(req, res)=>{ //atualização de produto
         });
     });
 
+    app.put('/atualizaitensproduto', async(req, res)=>{ //atualização de itens
+        await itemcompra.update(req.body,{
+            where: {CompraId: req.body.CompraId, ProdutoId: req.body.ProdutoId}
+            }).then(function(){
+                return res.json({
+                    error: false,
+                    message: 'Item alterado com sucesso!'
+                });
+            }).catch(function(erro){
+                return res.status(400).json({
+                    error: true,
+                    message:"Erro na alteração"
+                });
+            });
+        });
+
 //                                                                          fim de atualizar
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -609,9 +743,9 @@ app.get('/excluirproduto/:id', async(req, res)=>{ //Exclui produto
     });
 });
 
-app.get('/excluiritemcompra/:Compraid', async(req, res)=>{ //Exclui item
+app.get('/excluiritemcompra/:CompraId/:ProdutoId', async(req, res)=>{ //Exclui item
     await itemcompra.destroy({
-        where: {Compraid: req.params.Compraid}
+        where: {CompraId: req.params.CompraId, ProdutoId: req.params.ProdutoId}
     }).then(function(){
         return res.json({
             error: false,
@@ -624,6 +758,23 @@ app.get('/excluiritemcompra/:Compraid', async(req, res)=>{ //Exclui item
         });
     });
 });
+
+app.get('/excluiritemcompras/:ProdutoId', async(req, res)=>{ //Exclui item
+    await itemcompra.destroy({
+        where: {ProdutoId: req.params.ProdutoId}
+    }).then(function(){
+        return res.json({
+            error: false,
+            message: "Item excluido com sucesso!"
+        });
+    }).catch(function(){
+        return res.status(400).json({
+            error: true,
+            message: 'Erro ao excluir item!'
+        });
+    });
+});
+
 
 
 

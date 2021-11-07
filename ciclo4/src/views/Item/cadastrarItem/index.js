@@ -64,9 +64,9 @@ export const CadastrarItem = () => {
 
             <hr className="m-1" />
 
-            {status.type ==='error' ? <Alert color="danger">{status.message}</Alert> : ""}
+            {status.type === 'error' ? <Alert color="danger">{status.message}</Alert> : ""}
 
-            {status.type ==='success' ? <Alert color="success">{status.message}</Alert>: ""}
+            {status.type === 'success' ? <Alert color="success">{status.message}</Alert> : ""}
 
             <Form className="p-2" onSubmit={cadItem}>
                 <FormGroup className="p-2">
@@ -94,6 +94,10 @@ export const CadastrarItem = () => {
                 </FormGroup>
 
                 <Button type="submit" outline color="success">Cadastrar</Button>
+                <Button type="reset" outline color="success">
+                    Limpar
+                </Button>
+
             </Form>
         </Container>
     );

@@ -9,6 +9,8 @@ export const Home = () => {
                         <h1>Home</h1>
                     </div>
                 </div>
+                <hr className="m-1" />
+
                 <div className="d-flex">
                     <div className="m-auto">
                         <div className="p-2">
@@ -90,11 +92,72 @@ export const Home = () => {
                     </div>
                 </div>
 
-
                 {/* Desafio */}
                 {/* ------------------------------------------------------------------------------------------------------------------ */}
+                <div className="d-flex">
+                    <div className="m-auto">
+                        <div className="p-2">
+                            <Card body color="primary " outline>
+                                <CardBody>
+                                    <CardTitle tag="h5">
+                                        Compras
+                                    </CardTitle>
+                                    <CardSubtitle
+                                        className="mb-2 text-muted"
+                                        tag="h6">
+                                        Listar todos as compras
+                                    </CardSubtitle>
+                                    <Button href="/listar-compra" color="primary ">
+                                        Listar
+                                    </Button>
+                                </CardBody>
+                            </Card>
+                        </div>
+                    </div>
+                    
+                    <div className="m-auto">
+                        <div className="p-2">
+                            <Card body color="primary " outline>
+                                <CardBody>
+                                    <CardTitle tag="h5">
+                                        Itens-Produtos
+                                    </CardTitle>
+                                    <CardSubtitle
+                                        className="mb-2 text-muted"
+                                        tag="h6">
+                                        Listar todos os itens-produtos
+                                    </CardSubtitle>
+                                    <Button href="/listar-item-produto" color="primary ">
+                                        Listar
+                                    </Button>
+                                </CardBody>
+                            </Card>
+                        </div>
+                    </div>
 
 
+                    <div className="m-auto">
+                        <div className="p-2">
+                            <Card body color="primary " outline>
+                                <CardBody>
+                                    <CardTitle tag="h5">
+                                        Produtos
+                                    </CardTitle>
+                                    <CardSubtitle
+                                        className="mb-2 text-muted"
+                                        tag="h6">
+                                        Listar todos os produtos
+                                    </CardSubtitle>
+                                    <Button href="/listar-produto" color="primary ">
+                                        Listar
+                                    </Button>
+                                </CardBody>
+                            </Card>
+                        </div>
+                    </div>
+
+
+                </div>
             </Container>
         </div>
     );

@@ -5,26 +5,27 @@ import { useState } from "react/cjs/react.development"
 import { Alert, Button, Container, Form, FormGroup, Input, Label } from "reactstrap"
 import { api } from "../../../config";
 
-export const EditarServ = (props) => {
-
+export const EditarItem = (props) => {
+    
     const [data, setData] = useState([]);
-    const [id] = useState(props.match.params.id);
-    const [nome, SetNome] = useState('');
-    const [descricao, setDescricao] = useState('');
+    const [PedidoId] = useState(props.match.params.PedidoId);
+    const [ServicoId] = useState(props.match.params.ServicoId);
+    const [valor, SetValor] = useState('');
+    const [quantidade, setQuantidade] = useState('');
 
     const [status, setStatus] = useState({
         type: '',
         message: ''
     });
 
-    const edtServico = async e => {
+    const edtItem = async e => {
         e.preventDefault();
         console.log("Editar");
 
         const headers = {
             'Content-Type': 'application/json'
         };
-        await axios.put(api + "/atualizaservico", {id, nome, descricao}, {headers})
+        await axios.put(api + "/atualizaitens", {PedidoId, ServicoId, valor, quantidade}, {headers})
         .then((response)=>{
             // console.log(response.data.error);
             // console.log(response.data.message);
@@ -49,24 +50,28 @@ export const EditarServ = (props) => {
     }
 
     useEffect(() => {
-        const getServico = async () => {
-            await axios.get(api + "/servicos/" + id)
+        const getItem = async () => {
+            console.log(PedidoId)
+            console.log(ServicoId)
+            await axios.get(api + "/itempedido/"+ PedidoId + "/" + ServicoId)
                 .then((response) => {
-                    SetNome(response.data.servico.nome);
-                    setDescricao(response.data.servico.descricao);
+                    console.log(response);
+                    console.log(response.data.item.valor);
+                    SetValor(response.data.item.valor);
+                    setQuantidade(response.data.item.quantidade);
                 })
                 .catch(() => {
                     console.log("Erro: Não foi possivel conexao")
                 })
         }
-        getServico();
-    }, [id]);
+        getItem();
+    }, [PedidoId, ServicoId]);
 
     return (
         <div>
             <Container>
                 <div>
-                    <h1>Editar serviço</h1>
+                    <h1>Editar item</h1>
                 </div>
 
                 <hr className="m-1" />
@@ -74,19 +79,19 @@ export const EditarServ = (props) => {
                 {status.type === 'error' ? <Alert color="danger">{status.message}</Alert> : ""}
                 {status.type === 'success' ? <Alert color="success">{status.message}</Alert> : ""}
 
-                <Form className="p-2" onSubmit={edtServico}>
+                <Form className="p-2" onSubmit={edtItem}>
                     <FormGroup className="p-2">
-                        <Label>Nome</Label>
-                        <Input type="text" name="nome"
-                            placeholder="Nome do serviço" value={nome}
-                            onChange={e => SetNome(e.target.value)} />
+                        <Label>Valor</Label>
+                        <Input type="text" name="valor"
+                            placeholder="Valor do item" value={valor}
+                            onChange={e => SetValor(e.target.value)} />
                     </FormGroup>
 
                     <FormGroup className="p-2">
-                        <Label>Descrição</Label>
-                        <Input type="text" name="descricao"
-                            placeholder="Des do serviço" value={descricao}
-                            onChange={e => setDescricao(e.target.value)} />
+                        <Label>Quantidade</Label>
+                        <Input type="text" name="quantidade"
+                            placeholder="Quantidade de itens" value={quantidade}
+                            onChange={e => setQuantidade(e.target.value)} />
                     </FormGroup>
 
                     <Button type="submit" outline color="warning">Salvar</Button>

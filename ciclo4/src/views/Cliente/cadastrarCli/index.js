@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useState } from "react/cjs/react.development";
-import { Alert, Button, Container, Form, FormGroup, Input, Label } from "reactstrap"
+import { Alert, Button, Container, Form, FormGroup, Input, Label, Spinner } from "reactstrap"
 import { api } from "../../../config";
 
 export const CadastrarCli = () => {
@@ -12,9 +12,10 @@ export const CadastrarCli = () => {
     });
 
     const [status, setStatus] = useState({
+        formSave: false,
         type: '',
         message: ''
-    })
+    });
 
     const valorInput = e => setCliente({
         ...cliente, [e.target.name]: e.target.value
@@ -25,6 +26,10 @@ export const CadastrarCli = () => {
         e.preventDefault();
         console.log(cliente);
 
+        // setStatus({
+        //     formSave:true
+        // });                               Infelizmente não deu certo o timer
+
         const headers = {
             'Content-Type': "application/json"
         }
@@ -33,17 +38,20 @@ export const CadastrarCli = () => {
             .then((response) => {
                 if (response.data.error) {
                     setStatus({
+                        formSave: false,
                         type: 'error',
                         message: 'Erro: Sem conexão com a API.'
                     });
                 } else {
                     setStatus({
+                        formSave: false,
                         type: 'success',
                         message: response.data.message
                     })
                 }
             }).catch(() => {
                 setStatus({
+                    formSave: false,
                     type: 'error',
                     message: 'Erro: Sem conexão com a API.'
                 })
@@ -70,18 +78,18 @@ export const CadastrarCli = () => {
 
             <Form className="p-2" onSubmit={cadCliente}>
 
-            <FormGroup className="p-2">
+                <FormGroup className="p-2">
                     <Label>Nome</Label>
                     <Input type="text" name="nome" placeholder="Nome do cliente"
                         onChange={valorInput} />
                 </FormGroup>
-                
+
                 <FormGroup className="p-2">
                     <Label>Endereço</Label>
                     <Input type="text" name="endereco" placeholder="Endereço do cliente"
                         onChange={valorInput} />
                 </FormGroup>
-                
+
                 <FormGroup className="p-2">
                     <Label>Cidade</Label>
                     <Input type="text" name="cidade" placeholder="Cidade do cliente"
@@ -97,17 +105,24 @@ export const CadastrarCli = () => {
                 <FormGroup className="p-2">
                     <Label>Data de Nascimento</Label>
                     <Input type="date" name="nascimento" placeholder="Nascimento do cliente"
-                    onChange={valorInput}/>
+                        onChange={valorInput} />
                 </FormGroup>
 
                 <FormGroup className="p-2">
                     <Label>Cliente desde</Label>
                     <Input type="date" name="clienteDesde" placeholder="Cliente desde"
-                    onChange={valorInput}/>
+                        onChange={valorInput} />
                 </FormGroup>
+                {status.formSave ?
+                    <Button type="submit" className="m-2" outline color="success" disabled>
+                        <Spinner color="dark" size=""> </Spinner> </Button> :
+                    <Button type="submit" className="m-2" outline color="success">Cadastrar</Button>
+                }
+                <Button type="reset" outline color="success">
+                    Limpar
+                </Button>
 
-                <Button type="submit" className="m-2" outline color="success">Cadastrar</Button>
-                
+
             </Form>
         </Container>
     );

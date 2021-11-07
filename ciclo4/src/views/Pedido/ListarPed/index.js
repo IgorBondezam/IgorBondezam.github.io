@@ -29,11 +29,11 @@ export const ListarPed = () => {
     };
     const apagarPedido = async (id) => {
 
-        const headers={
-            'Content-type' : 'application/json'
+        const headers = {
+            'Content-type': 'application/json'
         };
 
-        await axios.get(api + '/excluirpedido/'+ id, {headers})
+        await axios.get(api + '/excluirpedido/' + id, { headers })
             .then((response) => {
                 console.log(response.data.item);
                 getPed();
@@ -62,6 +62,8 @@ export const ListarPed = () => {
                         <Link to="cadastrarpedido" className="btn btn-outline-primary btn-sm">Cadastrar Pedido</Link>
                     </div>
                 </div>
+                <hr className="m-1" />
+
                 {status.type == 'error' ? <Alert className="text-center" color="danger"> {status.message}   </Alert> : ""}
                 <Table striped>
                     <thead>
@@ -81,6 +83,8 @@ export const ListarPed = () => {
                                 <td className="text-center/">
                                     <Link to={"/listarpedido/" + item.id}
                                         className="btn btn-outline-primary btn-sm">Consultar</Link>
+                                    <Link to={"/editarpedido/" + item.id}
+                                        className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
                                         onClick={() => apagarPedido(item.id)}>Excluir</span>
                                 </td>

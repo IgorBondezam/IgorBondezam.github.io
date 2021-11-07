@@ -5,7 +5,7 @@ import { useState } from "react/cjs/react.development"
 import { Alert, Button, Container, Form, FormGroup, Input, Label } from "reactstrap"
 import { api } from "../../../config";
 
-export const EditarServ = (props) => {
+export const EditarProduto = (props) => {
 
     const [data, setData] = useState([]);
     const [id] = useState(props.match.params.id);
@@ -17,14 +17,14 @@ export const EditarServ = (props) => {
         message: ''
     });
 
-    const edtServico = async e => {
+    const edtProduto = async e => {
         e.preventDefault();
         console.log("Editar");
 
         const headers = {
             'Content-Type': 'application/json'
         };
-        await axios.put(api + "/atualizaservico", {id, nome, descricao}, {headers})
+        await axios.put(api + "/atualizaproduto", {id, nome, descricao}, {headers})
         .then((response)=>{
             // console.log(response.data.error);
             // console.log(response.data.message);
@@ -49,17 +49,17 @@ export const EditarServ = (props) => {
     }
 
     useEffect(() => {
-        const getServico = async () => {
-            await axios.get(api + "/servicos/" + id)
+        const getProduto = async () => {
+            await axios.get(api + "/listaprodutos/" + id)
                 .then((response) => {
-                    SetNome(response.data.servico.nome);
-                    setDescricao(response.data.servico.descricao);
+                    SetNome(response.data.produto.nome);
+                    setDescricao(response.data.produto.descricao);
                 })
                 .catch(() => {
                     console.log("Erro: Não foi possivel conexao")
                 })
         }
-        getServico();
+        getProduto();
     }, [id]);
 
     return (
@@ -74,18 +74,18 @@ export const EditarServ = (props) => {
                 {status.type === 'error' ? <Alert color="danger">{status.message}</Alert> : ""}
                 {status.type === 'success' ? <Alert color="success">{status.message}</Alert> : ""}
 
-                <Form className="p-2" onSubmit={edtServico}>
+                <Form className="p-2" onSubmit={edtProduto}>
                     <FormGroup className="p-2">
                         <Label>Nome</Label>
                         <Input type="text" name="nome"
-                            placeholder="Nome do serviço" value={nome}
+                            placeholder="Nome do Produto" value={nome}
                             onChange={e => SetNome(e.target.value)} />
                     </FormGroup>
 
                     <FormGroup className="p-2">
                         <Label>Descrição</Label>
                         <Input type="text" name="descricao"
-                            placeholder="Des do serviço" value={descricao}
+                            placeholder="Des do Produto" value={descricao}
                             onChange={e => setDescricao(e.target.value)} />
                     </FormGroup>
 

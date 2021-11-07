@@ -5,6 +5,7 @@ import axios from "axios";
 import { api } from "../../../config";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ListarCompra } from "../../Compra/ListarCompra";
 
 export const ListarServ = () => {
 
@@ -55,9 +56,10 @@ export const ListarServ = () => {
                     </div>
                     <div className="m-auto p-2">
                         <Link to="cadastrarservico" className="btn btn-outline-primary btn-sm ">Cadastrar Serviço</Link>
-                        <Link to="/atualizar-servico/" className="btn btn-outline-warning  btn-sm">Editar Serviço</Link>
                     </div>
                 </div>
+                <hr className="m-1" />
+
                 {status.type == 'error' ? <Alert className="text-center" color="danger"> {status.message}</Alert> : ""}
                 <Table striped>
                     <thead>
@@ -77,6 +79,8 @@ export const ListarServ = () => {
                                 <td className="text-center/">
                                     <Link to={"/listar-pedido/" + item.id}
                                         className="btn btn-outline-primary btn-sm">Consultar</Link>
+                                    <Link to={"/editarservico/"+item.id}
+                                        className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
                                         onClick={() => apagarServico(item.id)}>Excluir</span>
 

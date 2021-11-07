@@ -73,7 +73,7 @@ export const CadastrarPed = () => {
                 <FormGroup className="p-2">
                     <Label>Data do Pedido</Label>
                     <Input type="date" name="data" placeholder="Data"
-                    onChange={valorInput}/>
+                        onChange={valorInput} />
                 </FormGroup>
 
                 <FormGroup className="p-2">
@@ -83,6 +83,10 @@ export const CadastrarPed = () => {
                 </FormGroup>
 
                 <Button type="submit" outline color="success">Cadastrar</Button>
+                <Button type="reset" outline color="success">
+                    Limpar
+                </Button>
+
             </Form>
         </Container>
     );

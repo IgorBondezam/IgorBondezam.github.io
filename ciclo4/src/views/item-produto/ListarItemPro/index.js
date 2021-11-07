@@ -6,7 +6,7 @@ import { api } from "../../../config";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const ListarCli = () => {
+export const ListarItemPro = () => {
 
     const [data, setData] = useState([]);
 
@@ -14,11 +14,11 @@ export const ListarCli = () => {
         type: '',
         message: ''
     });
-    const getClientes = async () => {
-        await axios.get(api + "/listaclientes")
+    const getItensPro = async () => {
+        await axios.get(api + "/listaitemcompra")
             .then((response) => {
-                console.log(response.data.clientes);
-                setData(response.data.clientes);
+                console.log(response.data.item);
+                setData(response.data.item);
             }).catch(() => {
                 setStatus({
                     type: 'error',
@@ -28,27 +28,21 @@ export const ListarCli = () => {
             })
     }
 
-    const apagarCliente = async (id) => {
-
-        const headers = {
-            'Content-type': 'application/json'
-        }
-
-        await axios.get(api + "/excluircliente/" + id, { headers })
+    const apagarItemPro = async (CompraId, ProdutoId) => {
+        await axios.get(api + "/excluiritemcompra/" + CompraId + '/' + ProdutoId)
             .then((response) => {
                 console.log(response.data.error);
-                getClientes();
+                getItensPro();
             }).catch(() => {
                 setStatus({
                     type: 'error',
-                    message: 'Não foi possível conectar-se à API'
+                    message: 'Falha na conexão: Sem conexão com a API.'
                 });
             });
     };
 
-
     useEffect(() => {
-        getClientes();
+        getItensPro();
     }, [])
 
 
@@ -57,47 +51,37 @@ export const ListarCli = () => {
             <Container>
                 <div className="d-flex">
                     <div>
-                        <h1>Visualizar Clientes Cadastrados</h1>
+                        <h1>Visualizar informações dos Itens-Produtos</h1>
                     </div>
                     <div className="m-auto p-2">
-                        <Link to="cadastrarcliente" className="btn btn-outline-primary btn-sm">Cadastrar Cliente</Link>
+                        <Link to="cadastraritemproduto" className="btn btn-outline-primary btn-sm">Cadastrar Itens-Produtos</Link>
                     </div>
                 </div>
-
                 <hr className="m-1" />
 
                 {status.type == 'error' ? <Alert className="text-center" color="danger"> {status.message}</Alert> : ""}
                 <Table striped>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Endereço</th>
-                            <th>Cidade</th>
-                            <th>Uf</th>
-                            <th>Nascimento</th>
-                            <th>Cliente Desde</th>
-                            <th>Ações</th>
-
+                            <th>CompraId</th>
+                            <th>ProdutoId</th>
+                            <th>Valor</th>
+                            <th>Quantidade</th>
+                            <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
                         {data.map(item => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.nome}</td>
-                                <td>{item.endereco}</td>
-                                <td>{item.cidade}</td>
-                                <td>{item.uf}</td>
-                                <td>{item.nascimento}</td>
-                                <td>{item.clienteDesde}</td>
+                            <tr key={item.CompraId}>
+                                <td>{item.CompraId}</td>
+                                <td>{item.ProdutoId}</td>
+                                <td>{item.valor}</td>
+                                <td>{item.quantidade}</td>
                                 <td className="text-center/">
-                                    <Link to={"/listar-pedido-do-cliente/" + item.id}
-                                        className="btn btn-outline-primary btn-sm">Consultar</Link>
-                                    <Link to={"/editarcliente/" + item.id}
+                                    <Link to={"/editaritemproduto/" + item.CompraId + '/' + item.ProdutoId}
                                         className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
-                                        onClick={() => apagarCliente(item.id)}>Excluir</span>
+                                        onClick={() => apagarItemPro(item.CompraId, item.ProdutoId)}>Excluir</span>
 
                                 </td>
                             </tr>

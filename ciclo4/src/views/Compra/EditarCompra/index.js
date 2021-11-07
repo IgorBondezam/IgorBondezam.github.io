@@ -5,26 +5,28 @@ import { useState } from "react/cjs/react.development"
 import { Alert, Button, Container, Form, FormGroup, Input, Label } from "reactstrap"
 import { api } from "../../../config";
 
-export const EditarServ = (props) => {
+export const EditarCompra = (props) => {
 
-    const [data, setData] = useState([]);
+    const [dataD, setDataD] = useState([]);
     const [id] = useState(props.match.params.id);
-    const [nome, SetNome] = useState('');
-    const [descricao, setDescricao] = useState('');
+    const [data, SetData] = useState('');
+    const [ClienteId, setClienteId] = useState('');
 
     const [status, setStatus] = useState({
         type: '',
         message: ''
     });
 
-    const edtServico = async e => {
+    const edtCompra = async e => {
         e.preventDefault();
         console.log("Editar");
+        console.log(status);
+        
 
         const headers = {
             'Content-Type': 'application/json'
         };
-        await axios.put(api + "/atualizaservico", {id, nome, descricao}, {headers})
+        await axios.put(api + "/atualizacompra", {id, data, ClienteId}, {headers})
         .then((response)=>{
             // console.log(response.data.error);
             // console.log(response.data.message);
@@ -49,44 +51,46 @@ export const EditarServ = (props) => {
     }
 
     useEffect(() => {
-        const getServico = async () => {
-            await axios.get(api + "/servicos/" + id)
+        const getCompra = async () => {
+            await axios.get(api + "/compras/" + id)
                 .then((response) => {
-                    SetNome(response.data.servico.nome);
-                    setDescricao(response.data.servico.descricao);
+                    console.log(response.data.compra.data)
+                    console.log(response.data.compra.ClienteId)
+                    SetData(response.data.compra.data);
+                    setClienteId(response.data.compra.ClienteId);
                 })
                 .catch(() => {
                     console.log("Erro: Não foi possivel conexao")
                 })
         }
-        getServico();
+        getCompra();
     }, [id]);
 
     return (
         <div>
             <Container>
                 <div>
-                    <h1>Editar serviço</h1>
+                    <h1>Editar Compra</h1>
                 </div>
 
                 <hr className="m-1" />
-
+                
                 {status.type === 'error' ? <Alert color="danger">{status.message}</Alert> : ""}
                 {status.type === 'success' ? <Alert color="success">{status.message}</Alert> : ""}
 
-                <Form className="p-2" onSubmit={edtServico}>
+                <Form className="p-2" onSubmit={edtCompra}>
                     <FormGroup className="p-2">
-                        <Label>Nome</Label>
-                        <Input type="text" name="nome"
-                            placeholder="Nome do serviço" value={nome}
-                            onChange={e => SetNome(e.target.value)} />
+                        <Label>Data</Label>
+                        <Input type="date" name="data"
+                            placeholder="Data do pedido" value={data}
+                            onChange={e => SetData(e.target.value)} />
                     </FormGroup>
 
                     <FormGroup className="p-2">
-                        <Label>Descrição</Label>
-                        <Input type="text" name="descricao"
-                            placeholder="Des do serviço" value={descricao}
-                            onChange={e => setDescricao(e.target.value)} />
+                        <Label>ClienteId</Label>
+                        <Input type="text" name="ClienteId"
+                            placeholder="Id do cliente" value={ClienteId}
+                            onChange={e => setClienteId(e.target.value)} />
                     </FormGroup>
 
                     <Button type="submit" outline color="warning">Salvar</Button>

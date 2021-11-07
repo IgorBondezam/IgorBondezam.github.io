@@ -6,6 +6,8 @@ import { api } from "../../../config";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+
+
 export const ListarItem = () => {
 
     const [data, setData] = useState([]);
@@ -28,8 +30,9 @@ export const ListarItem = () => {
             })
     }
 
-    const apagarItem = async (PedidoId) => {
-        await axios.get(api + "/excluiritem/" + PedidoId)
+    const apagarItem = async (PedidoId, ServicoId) => {
+    
+        await axios.get(api + "/excluiritem/" + PedidoId + '/' + ServicoId)
             .then((response) => {
                 console.log(response.data.error);
                 getItens();
@@ -57,6 +60,8 @@ export const ListarItem = () => {
                         <Link to="cadastraritem" className="btn btn-outline-primary btn-sm">Cadastrar Itens</Link>
                     </div>
                 </div>
+                <hr className="m-1" />
+
                 {status.type == 'error' ? <Alert className="text-center" color="danger"> {status.message}</Alert> : ""}
                 <Table striped>
                     <thead>
@@ -76,8 +81,10 @@ export const ListarItem = () => {
                                 <td>{item.valor}</td>
                                 <td>{item.quantidade}</td>
                                 <td className="text-center/">
+                                <Link to={"/editaritem/" + item.PedidoId +'/'+ item.ServicoId}
+                                        className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
-                                        onClick={() => apagarItem(item.PedidoId)}>Excluir</span>
+                                        onClick={() => apagarItem(item.PedidoId, item.ServicoId)}>Excluir</span>
 
                                 </td>
                             </tr>

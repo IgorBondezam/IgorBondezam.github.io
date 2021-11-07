@@ -29,13 +29,13 @@ export const InfoPed = (props) => {
                 // console.log("Erro: Sem conexão com a API.")
             });
     };
-    const apagarItem = async (PedidoId) => {
+    const apagarItem = async (PedidoId, ServicoId) => {
 
         const headers = {
             'Content-type': 'application/json'
         };
 
-        await axios.get(api + '/excluiritem/' + PedidoId, { headers })
+        await axios.get(api + '/excluiritem/' + PedidoId + '/' + ServicoId, { headers })
             .then((response) => {
                 console.log(response.data.item);
                 getPed();
@@ -67,6 +67,7 @@ export const InfoPed = (props) => {
                     <thead>
                         <tr>
                             <th>Pedido</th>
+                            <th>Serviço</th>
                             <th>Quantidade</th>
                             <th>Valor</th>
                             <th>Visualizar</th>
@@ -76,11 +77,14 @@ export const InfoPed = (props) => {
                         {data.map(item => (
                             <tr key={item.PedidoId}>
                                 <td>{item.PedidoId}</td>
+                                <td>{item.ServicoId}</td>
                                 <td>{item.quantidade}</td>
                                 <td>{item.valor}</td>
                                 <td className="text-center/">
+                                    <Link to={"/editaritem/" + item.PedidoId + '/' + item.ServicoId}
+                                        className="btn btn-outline-warning btn-sm">Editar</Link>
                                     <span className="btn btn-outline-danger btn-sm mr-2"
-                                        onClick={() => apagarItem(item.PedidoId)}>Excluir</span>
+                                        onClick={() => apagarItem(item.PedidoId, item.ServicoId)}>Excluir</span>
                                 </td>
                             </tr>
                         ))}
